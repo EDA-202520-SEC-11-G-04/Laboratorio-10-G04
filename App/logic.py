@@ -79,7 +79,7 @@ def new_analyzer():
         analyzer['stops'] = m.new_map(
             num_elements=8000, load_factor=0.7, prime=109345121)
 
-        analyzer['connections'] = G.new_graph(order=8000)
+        analyzer['connections'] = G.new_graph(order=20000)
         return analyzer
     except Exception as exp:
         return exp

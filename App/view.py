@@ -53,11 +53,12 @@ def print_menu():
     print("\n")
     print("*******************************************")
     print("Bienvenido")
-    print("1- Cargar información de buses de singapur") # Clase 1: Implementar grafo y mostrar datos
-    print("2- Encontrar las paradas más concurridas") # Clase 1: Implementar el grafo
-    print("3- Encontrar una ruta entre dos paradas") # Casa 1: Implementar funcionalidad dfs y bfs
-    print("4- Encontrar la ruta mínima entre dos paradas") # Clase 2: Implementar dijkstra
-    print("5- Mostrar en un mapa la ruta mínima entre dos paradas") # Casa 2: Mostrar ruta con folium
+    print("1- Cargar información de buses de singapur") # Clase 1: Implementar digraph básico
+    print("2- Encontrar las paradas más concurridas") # Casa 1: Implementar digraph completo
+    print("3- Encontrar una ruta entre dos paradas (DFS)") # Casa 1: Implementar funcionalidad dfs
+    print("4- Encontrar una ruta entre dos paradas (BFS)") # Clase 2: Implementar funcionalidad bfs
+    print("5- Encontrar la ruta mínima entre dos paradas") # Casa 2: Implementar dijkstra
+    print("6- Mostrar en un mapa la ruta mínima entre dos paradas") # Trabajo Complementario: Mostrar ruta con folium
     print("0- Salir")
     print("*******************************************")
 
