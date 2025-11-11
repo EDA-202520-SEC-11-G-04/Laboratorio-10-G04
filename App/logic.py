@@ -191,7 +191,7 @@ def add_stop_connection(analyzer, lastservice, service):
 
 def add_stop(analyzer, stop):
     """
-    Adiciona una estación como un vertice del grafo
+    Adiciona una parada (BusStopCode) en los stops del sistema de transporte
     """
     stop['services'] = lt.new_list()
     m.put(analyzer['stops'], stop['BusStopCode'], stop)
@@ -251,7 +251,7 @@ def get_most_concurrent_stops(analyzer):
     """
     Obtiene las 5 paradas más concurridas
     """
-    # TODO: Obtener las 5 paradas más concurridas, es decir, con más arcos entrantes y salientes
+    # TODO: Obtener las 5 paradas más concurridas, es decir, con más arcos salientes
     ...
 
 def get_route_between_stops_dfs(analyzer, stop1, stop2):

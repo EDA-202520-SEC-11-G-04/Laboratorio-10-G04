@@ -42,6 +42,7 @@ operación seleccionada.
 
 
 servicefile = 'bus_routes_14000.csv'
+stopsfile = 'bus_stops.csv'
 initialStation = None
 
 # ___________________________________________________
@@ -65,7 +66,7 @@ def print_menu():
 
 def option_one(cont):
     print("\nCargando información de transporte de singapur ....")
-    logic.load_services(cont, servicefile)
+    logic.load_services(cont, servicefile, stopsfile)
     numedges = logic.total_connections(cont)
     numvertex = logic.total_stops(cont)
     print('Numero de vertices: ' + str(numvertex))
