@@ -135,8 +135,18 @@ def load_services(analyzer, servicesfile, stopsfile):
 def total_stops(analyzer):
     """
     Total de paradas de autobus en el grafo
+    Parameters:
+        analyzer (list): Lista de diccionarios con datos de paradas (e.g., desde bus_stops.csv).
+    
+    Returns:
+        int: Número total de paradas únicas.
     """
-    # TODO: Retorne el número de vértices del grafo
+    if not analyzer:
+        return 0
+    unique_stops = set()
+    for stop in analyzer:
+        unique_stops.add(stop['BusStopCode'])
+    return len(unique_stops)
 
 
 def total_connections(analyzer):
