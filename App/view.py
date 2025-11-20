@@ -101,7 +101,7 @@ def option_four(cont):
     start = input("Parada origen: ").strip()
     end = input("Parada destino: ").strip()
     
-    result = logic.get_route_between_stops_bfs(cont["graph"], start, end)
+    result = logic.get_route_between_stops_bfs(cont, start, end)
     
     if not result["success"]:
         print("No se encontró ruta entre", start, "y", end)
