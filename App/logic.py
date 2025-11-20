@@ -32,6 +32,7 @@ from DataStructures.List import single_linked_list as lt
 from DataStructures.Map import map_linear_probing as m
 from DataStructures.Graph import digraph as G
 import DataStructures.Graph.dfs as dfs
+import DataStructures.Graph.bfs as bfs
 
 import csv
 import time
@@ -299,8 +300,53 @@ def get_route_between_stops_bfs(analyzer, stop1, stop2):
     """
     Obtener la ruta entre dos parada usando bfs
     """
-    # TODO: Obtener la ruta entre dos parada usando bfs
-    ...
+    if stop1 == stop2:
+        info = G.get_vertex_information(analyzer, stop1)
+        return {
+            "success": True,
+            "route": [{
+                "BusStopCode": stop1,
+                "Description": info.get("Description", ""),
+                "Latitude": info.get("Latitude"),
+                "Longitude": info.get("Longitude")
+            }],
+            "total_stops": 1,
+            "total_transfers": 0
+        }
+
+    # Ejecutamos BFS
+    search = bfs.bfs_vertex(analyzer, stop1, stop2)
+
+    if not bfs.has_path_to(search, stop2):
+        return {
+            "success": False,
+            "message": "No existe ruta entre las paradas"
+        }
+
+    # Reconstruimos el camino
+    path_codes = bfs.path_to(search, stop2)
+    route = []
+
+    for code in path_codes:
+        info = G.get_vertex_information(analyzer, code)
+        route.append({
+            "BusStopCode": code,
+            "Description": info.get("Description", "Sin nombre"),
+            "Latitude": info.get("Latitude"),
+            "Longitude": info.get("Longitude")
+        })
+
+    total_transfers = len(path_codes) - 2   # transbordos reales (excluye origen y destino)
+    if total_transfers < 0:
+        total_transfers = 0
+
+    return {
+        "success": True,
+        "route": route,
+        "total_stops": len(route),
+        "total_transfers": total_transfers,
+        "hops": len(route) - 1   # número de segmentos de bus
+    }
 
 def get_shortest_route_between_stops(analyzer, stop1, stop2):
     """
@@ -314,7 +360,6 @@ def get_shortest_route_between_stops(analyzer, stop1, stop2):
 def show_calculated_shortest_route(analyzer, destination_stop):
     # (Opcional) TODO: Mostrar en un mapa la ruta mínima entre dos paradas usando folium
     ...
-
 
 
 

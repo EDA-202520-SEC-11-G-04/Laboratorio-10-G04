@@ -123,3 +123,17 @@ def update_vertex_info(graph, key, new_info):
     v.set_value(vertex, new_info)
     mp.put(graph["vertices"], key, vertex)
     return graph
+
+def get_vertex_information(my_graph, key_u):
+    """
+    Retorna la informacion (value) asociada al vertice con llave key_u
+    Si el vertice no existe, se lanza una excepcion.
+    """
+    # Verificamos si el vértice existe en el mapa de vértices del grafo
+    if not mp.contains(my_graph['vertices'], key_u):
+        raise Exception("El vertice no existe")
+    
+    vertex_entry = mp.get(my_graph['vertices'], key_u)
+    vertex = vertex_entry['value']
+    
+    return v.get_value(vertex)

@@ -96,8 +96,21 @@ def option_three(cont):
 
 
 def option_four(cont):
-    # TODO: Imprimir los resultados de la opción 4
-    ...
+    print("\nEncontrar ruta entre dos paradas usando BFS")
+    print("Formato: Solo BusStopCode  (ej: '75009' o '01012')")
+    start = input("Parada origen: ").strip()
+    end = input("Parada destino: ").strip()
+    
+    result = logic.get_route_between_stops_bfs(cont, start, end)
+    
+    if not result["success"]:
+        print("No se encontró ruta entre", start, "y", end)
+    else:
+        print("Ruta más corta encontrada (mínimo número de paradas):")
+        for stop in result["route"]:
+            print("  -", stop["BusStopCode"], "-", stop["Description"])
+        print("Total paradas:", result["total_stops"])
+        print("Transbordos necesarios:", result["total_transfers"])
 
 def option_five(cont):
     # TODO: Imprimir los resultados de la opción 5
