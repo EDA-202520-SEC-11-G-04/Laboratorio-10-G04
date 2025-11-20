@@ -74,12 +74,26 @@ def option_one(cont):
     print('El limite de recursion actual: ' + str(sys.getrecursionlimit()))
 
 def option_two(cont):
-    # TODO: Imprimir los resultados de la opción 2
-    ...
+    print("\nBuscando las paradas más concurridas...")
+    results = logic.get_most_concurrent_stops(cont, top_n=5)
+    print("Top 5 paradas (BusStopCode, #servicios):")
+    for i, (code, count) in enumerate(results, start=1):
+        print(f"{i}. {code} -> {count} servicios")
+
 
 def option_three(cont):
-    # TODO: Imprimir los resultados de la opción 3
-    ...
+    print("\nEncontrar ruta entre dos paradas usando DFS")
+    print("Formato: BusStopCode-ServiceNo  (ej: '75009-10')")
+    start = input("Vertice origen: ").strip()
+    end = input("Vertice destino: ").strip()
+    path = logic.get_route_between_stops_dfs(cont, start, end)
+    if path is None:
+        print("No se encontró ruta entre", start, "y", end)
+    else:
+        print("Ruta encontrada (en orden):")
+        for p in path:
+            print("  -", p)
+
 
 def option_four(cont):
     # TODO: Imprimir los resultados de la opción 4

@@ -66,8 +66,6 @@ def order(graph):
 def size(graph):
     return graph["num_edges"]
 
-def vertices(graph):
-    return mp.key_set(graph["vertices"])
 
 def degree(graph, key_u):
     if not mp.contains(graph["vertices"], key_u):
@@ -77,3 +75,51 @@ def degree(graph, key_u):
     adj = v.get_adjacents(vertex_u)
     return mp.size(adj)
 
+def adjacents(graph, key_u):
+    """
+    Retorna el mapa de arcos adyacentes al vértice key_u.
+    """
+    if not mp.contains(graph["vertices"], key_u):
+        raise Exception("El vertice no existe")
+    vertex_u = mp.get(graph["vertices"], key_u)
+    return v.get_adjacents(vertex_u)
+
+
+# ------------------------------------------------
+def vertices(graph):
+    """
+    Retorna la lista (array_list) con las llaves de todos los vertices.
+    """
+    return mp.key_set(graph["vertices"])
+
+
+# ------------------------------------------------
+def edges_vertex(graph, key_u):
+    """
+    Retorna la lista (array_list) con los arcos salientes del vertice key_u.
+    """
+    if not mp.contains(graph["vertices"], key_u):
+        raise Exception("El vertice no existe")
+    adj = adjacents(graph, key_u)
+    return mp.value_set(adj)
+
+
+# ------------------------------------------------
+def get_vertex(graph, key):
+    """
+    Retorna el vertice (dict) almacenado en graph['vertices'] o None.
+    """
+    return mp.get(graph["vertices"], key)
+
+
+# ------------------------------------------------
+def update_vertex_info(graph, key, new_info):
+    """
+    Actualiza la información asociada al vértice (campo 'value').
+    """
+    if not mp.contains(graph["vertices"], key):
+        raise Exception("El vertice no existe")
+    vertex = mp.get(graph["vertices"], key)
+    v.set_value(vertex, new_info)
+    mp.put(graph["vertices"], key, vertex)
+    return graph

@@ -31,6 +31,7 @@
 from DataStructures.List import single_linked_list as lt
 from DataStructures.Map import map_linear_probing as m
 from DataStructures.Graph import digraph as G
+import DataStructures.Graph.dfs as dfs
 
 import csv
 import time
@@ -153,7 +154,7 @@ def total_connections(analyzer):
     """
     Total de enlaces entre las paradas
     """
-    # TODO: Retorne el número de arcos del grafo de conexiones
+    return G.num_edges(analyzer['connections'])
 
 
 # Funciones para la medición de tiempos
@@ -259,17 +260,40 @@ def add_same_stop_connections(analyzer, service):
 
 def get_most_concurrent_stops(analyzer):
     """
-    Obtiene las 5 paradas más concurridas
+    Obtiene las 5 paradas más concurridas: las que tienen más arcos salientes.
     """
-    # TODO: Obtener las 5 paradas más concurridas, es decir, con más arcos salientes
-    ...
+    graph = analyzer["connections"]
+
+    # obtenir la liste des vertices
+    vertices = G.vertices(graph)["elements"]
+
+    results = []
+
+    for v in vertices:
+        try:
+            deg = G.degree(graph, v)
+            results.append((v, deg))
+        except:
+            pass
+
+    results.sort(key=lambda x: x[1], reverse=True)
+
+    return results[:5]
+
 
 def get_route_between_stops_dfs(analyzer, stop1, stop2):
     """
-    Obtener la ruta entre dos parada usando dfs
+    Obtener la ruta entre dos paradas usando DFS.
+    stop1 y stop2 deben ser vértices del grafo (ej: '75009-10')
     """
-    # TODO: Obtener la ruta entre dos parada usando dfs
-    ...
+    graph = analyzer["connections"]
+
+    search = dfs.dfs(graph, stop1)
+
+    if not dfs.has_path_to(search, stop2):
+        return None
+    
+    return dfs.path_to(search, stop2)
 
 def get_route_between_stops_bfs(analyzer, stop1, stop2):
     """
