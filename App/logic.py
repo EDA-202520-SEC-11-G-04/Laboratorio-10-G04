@@ -336,7 +336,7 @@ def get_route_between_stops_bfs(analyzer, stop1, stop2):
             "Longitude": info.get("Longitude")
         })
 
-    total_transfers = len(path_codes) - 2   # transbordos reales (excluye origen y destino)
+    total_transfers = len(path_codes) - 2 
     if total_transfers < 0:
         total_transfers = 0
 
@@ -345,7 +345,7 @@ def get_route_between_stops_bfs(analyzer, stop1, stop2):
         "route": route,
         "total_stops": len(route),
         "total_transfers": total_transfers,
-        "hops": len(route) - 1   # número de segmentos de bus
+        "hops": len(route) - 1  
     }
 
 def get_shortest_route_between_stops(analyzer, stop1, stop2):
