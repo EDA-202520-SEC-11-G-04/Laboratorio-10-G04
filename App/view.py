@@ -75,7 +75,7 @@ def option_one(cont):
 
 def option_two(cont):
     print("\nBuscando las paradas más concurridas...")
-    results = logic.get_most_concurrent_stops(cont, top_n=5)
+    results = logic.get_most_concurrent_stops(cont)
     print("Top 5 paradas (BusStopCode, #servicios):")
     for i, (code, count) in enumerate(results, start=1):
         print(f"{i}. {code} -> {count} servicios")

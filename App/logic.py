@@ -137,25 +137,17 @@ def load_services(analyzer, servicesfile, stopsfile):
 def total_stops(analyzer):
     """
     Total de paradas de autobus en el grafo
-    Parameters:
-        analyzer (list): Lista de diccionarios con datos de paradas (e.g., desde bus_stops.csv).
-    
-    Returns:
-        int: Número total de paradas únicas.
     """
-    if not analyzer:
-        return 0
-    unique_stops = set()
-    for stop in analyzer:
-        unique_stops.add(stop['BusStopCode'])
-    return len(unique_stops)
+    return m.size(analyzer['stops'])
+
 
 
 def total_connections(analyzer):
     """
     Total de enlaces entre las paradas
     """
-    return G.num_edges(analyzer['connections'])
+    return m.size(analyzer['stops'])
+
 
 
 # Funciones para la medición de tiempos
@@ -217,6 +209,12 @@ def add_stop_vertex(analyzer, stopid):
     G.insert_vertex(analyzer['connections'], stopid, stopid)
     return analyzer
 
+def compare_values(value1, value2):
+    if value1 == value2:
+        return 0
+    return -1
+
+
 
 def add_route_stop(analyzer, service):
     """
@@ -224,8 +222,9 @@ def add_route_stop(analyzer, service):
     """
     stop_info = m.get(analyzer['stops'], service['BusStopCode'])
     stop_services = stop_info['services']
-    if lt.is_present(stop_services, service['ServiceNo'], lt.default_function) == -1:
+    if lt.is_present(stop_services, service['ServiceNo'], compare_values) == -1:
         lt.add_last(stop_services, service['ServiceNo'])
+
 
     return analyzer
 
@@ -265,7 +264,6 @@ def get_most_concurrent_stops(analyzer):
     """
     graph = analyzer["connections"]
 
-    # obtenir la liste des vertices
     vertices = G.vertices(graph)["elements"]
 
     results = []
