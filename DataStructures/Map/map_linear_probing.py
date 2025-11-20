@@ -7,7 +7,8 @@ from DataStructures.Map import map_functions as mf
 def new_map(num_elements, load_factor, prime=109345121):
     value = int(num_elements / load_factor)
     capacity = mf.next_prime(value)
-
+    if capacity == 0:
+        capacity = 3
     res = {
         'prime': prime,
         'capacity': capacity,

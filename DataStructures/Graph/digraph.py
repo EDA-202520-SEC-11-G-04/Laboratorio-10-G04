@@ -2,41 +2,54 @@ from DataStructures.Map import map_linear_probing as mp
 from DataStructures.Graph import vertex as v  
 from DataStructures.Graph import edge as e
 
-def new_graph():
-    """
-    Crea un nuevo grafo dirigido vacío.
-    Retorna: Grafo con mapa de vértices inicializado.
-    """
+DEFAULT_LOAD_FACTOR = 0.5
+DEFAULT_PRIME = 109345121
+
+
+def new_graph(order):
     graph = {
-        'vertices': mp.new_map() 
+        "vertices": mp.new_map(order, DEFAULT_LOAD_FACTOR, DEFAULT_PRIME),
+        "num_edges": 0
     }
     return graph
 
 
+def insert_vertex(my_graph, key_u, info_u):
 
-def insert_vertex(graph, key, value):
-    """
-    Inserta un vértice en el grafo si no existe.
-    """
-    if mp.contains(graph['vertices'], key):
-        return graph
-    new_v = v.new_vertex(key, value)
-    mp.put(graph['vertices'], key, new_v)
-    return graph
+    adj_map = mp.new_map(3, DEFAULT_LOAD_FACTOR, DEFAULT_PRIME)
+
+    vertex = {
+        "key": key_u,
+        "value": info_u,
+        "adjacents": adj_map
+    }
+
+    mp.put(my_graph["vertices"], key_u, vertex)
+
+    return my_graph
 
 
-def add_edge(graph, key_u, key_v, weight):
-    """
-    Agrega un arco dirigido de key_u a key_v con peso weight.
-    Requiere que ambos vértices existan.
-    """
-    if not mp.contains(graph['vertices'], key_u) or not mp.contains(graph['vertices'], key_v):
-        return graph  # No agregar si no existen vértices
-    vertex_u = mp.get(graph['vertices'], key_u)['value']
-    if v.get_edge(vertex_u, key_v) is None:  # No agregar si ya existe
+def add_edge(graph, key_u, key_v, weight=1.0):
+
+    if not mp.contains(graph["vertices"], key_u):
+        raise Exception("El vertice u no existe")
+
+    if not mp.contains(graph["vertices"], key_v):
+        raise Exception("El vertice v no existe")
+
+    vertex_u = mp.get(graph["vertices"], key_u)  # <-- direct
+
+    existing_edge = v.get_edge(vertex_u, key_v)
+
+    if existing_edge is None:
         new_edge = e.new_edge(key_v, weight)
-        v.add_adjacent(vertex_u, new_edge)
+        v.add_adjacent(vertex_u, key_v, new_edge)
+        graph["num_edges"] += 1
+    else:
+        existing_edge["weight"] = weight
+
     return graph
+
 
 def contains_vertex(graph, key):
     """
@@ -51,13 +64,16 @@ def order(graph):
     return mp.size(graph['vertices'])
 
 def size(graph):
-    """
-    Retorna el tamaño (número de arcos) del grafo.
-    """
-    total_edges = 0
-    vertices_list = mp.value_set(graph['vertices'])  # Lista de vértices
-    for vertex in vertices_list['elements']:
-        if vertex is not None:
-            adjacents = v.get_adjacents(vertex)
-            total_edges += mp.size(adjacents)
-    return total_edges
+    return graph["num_edges"]
+
+def vertices(graph):
+    return mp.key_set(graph["vertices"])
+
+def degree(graph, key_u):
+    if not mp.contains(graph["vertices"], key_u):
+        raise Exception("El vertice no existe")
+
+    vertex_u = mp.get(graph["vertices"], key_u)
+    adj = v.get_adjacents(vertex_u)
+    return mp.size(adj)
+
