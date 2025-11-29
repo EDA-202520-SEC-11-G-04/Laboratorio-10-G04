@@ -24,7 +24,6 @@
  *
  """
 
-
 import sys
 import threading
 from App import logic
@@ -113,8 +112,37 @@ def option_four(cont):
         print("Transbordos necesarios:", result["total_transfers"])
 
 def option_five(cont):
-    # TODO: Imprimir los resultados de la opción 5
-    ...
+    """
+    Opción del menú para encontrar la ruta de distancia mínima entre dos paradas
+    usando el algoritmo de Dijkstra.
+    """
+    print("\nEncontrar ruta de distancia mínima entre dos paradas usando Dijkstra")
+    print("Formato: Solo BusStopCode (ej: '75009' o '01012')")
+    
+    start = input("Parada origen: ").strip()
+    end = input("Parada destino: ").strip()
+    
+    result = logic.get_shortest_route_between_stops(cont, start, end)
+    
+    if not result["success"]:
+        print(f"No se encontró ruta entre {start} y {end}")
+    else:
+        print("\nRuta de distancia mínima encontrada:")
+        print(f"Distancia total: {result['total_distance']:.2f} unidades")
+        print(f"Total de paradas: {result['total_stops']}")
+        print("\nRecorrido:")
+        
+        for i, stop in enumerate(result["route"]):
+            if i == 0:
+                print(f"  INICIO - {stop['BusStopCode']} - {stop['Description']}")
+            elif i == len(result["route"]) - 1:
+                print(f"  FIN    - {stop['BusStopCode']} - {stop['Description']}")
+            else:
+                print(f"  {i:2d}.    - {stop['BusStopCode']} - {stop['Description']}")
+        
+        print(f"\nResumen:")
+        print(f"  • Paradas visitadas: {result['total_stops']}")
+        print(f"  • Distancia total: {result['total_distance']:.2f} unidades")
 
 def option_six(cont):
     # (Opcional) TODO: Imprimir los resultados de la opción 6

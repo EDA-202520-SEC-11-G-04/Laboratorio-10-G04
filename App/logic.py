@@ -33,6 +33,8 @@ from DataStructures.Map import map_linear_probing as m
 from DataStructures.Graph import digraph as G
 import DataStructures.Graph.dfs as dfs
 import DataStructures.Graph.bfs as bfs
+from DataStructures.Graph import dijsktra_structure as dijsktra_st
+from DataStructures.Stack import stack as st
 
 import csv
 import time
@@ -346,14 +348,61 @@ def get_route_between_stops_bfs(analyzer, stop1, stop2):
         "hops": len(route) - 1  
     }
 
-def get_shortest_route_between_stops(analyzer, stop1, stop2):
+def get_shortest_route_between_stops(cont, start, end):
     """
-    Obtener la ruta mínima entre dos paradas
+    Encuentra la ruta de distancia mínima entre dos paradas con Dijkstra.
     """
-    # TODO: Obtener la ruta mínima entre dos paradas
-    # Nota: Tenga en cuenta que el debe guardar en la llave
-    #       analyzer['paths'] el resultado del algoritmo de Dijkstra
-    ...
+    result = {
+        "success": False,
+        "route": [],
+        "total_distance": 0,
+        "total_stops": 0
+    }
+    
+    try:
+        graph = cont["stops_graph"]  
+        
+        # Verificar que ambas paradas existen
+        if not G.contains_vertex(graph, start):
+            return result
+        if not G.contains_vertex(graph, end):
+            return result
+        
+        # Ejecutar el algoritmo de Dijkstra desde origen
+        dijkstra_result = dijsktra_st.dijkstra(graph, start)
+        
+        if not dijsktra_st.has_path_to(end, dijkstra_result):
+            return result
+        
+        path = dijsktra_st.path_to(end, dijkstra_result)
+        
+        # Obtener la distancia total
+        total_distance = dijsktra_st.dist_to(end, dijkstra_result)
+        
+        # Construir la lista de paradas
+        route = []
+        while not st.is_empty(path):
+            stop_code = st.pop(path)
+            
+            stop_info = G.get_vertex_information(graph, stop_code)
+            
+            route.append({
+                "BusStopCode": stop_code,
+                "Description": stop_info.get("Description", ""),
+                "Latitude": stop_info.get("Latitude", 0),
+                "Longitude": stop_info.get("Longitude", 0)
+            })
+        
+        result["success"] = True
+        result["route"] = route
+        result["total_distance"] = total_distance
+        result["total_stops"] = len(route)
+        
+    except Exception as e:
+        print(f"Error al buscar ruta: {str(e)}")
+        result["success"] = False
+    
+    return result
 
 def show_calculated_shortest_route(analyzer, destination_stop):
     # (Opcional) TODO: Mostrar en un mapa la ruta mínima entre dos paradas usando folium
